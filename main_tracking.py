@@ -19,7 +19,7 @@ from scipy.interpolate import interp1d
 
 
 neighbour = []
-phi_original = []
+phi = []
 phi_reconstruct = [0., 0.]
 boundary_1 = []
 boundary_2 = []
@@ -37,7 +37,7 @@ t = 0.52
 # t=1.91
 # t=1
 """U is the the ORIGINAL data you want to track"""
-U = 0*t
+U = 1*t
 
 """U_track is the NEW system parameter you want to do tracking in"""
 U_track=1*t
@@ -49,7 +49,7 @@ F0=10
 a=4
 
 # This scales the lattice parameter
-ascale=10
+ascale=1.1
 
 # this scales the input current.
 scalefactor=1
@@ -109,16 +109,19 @@ while r.successful() and r.t < time/lat.freq:
     # add to expectations
 
     harmonic.progress(N, int(newtime / delta_track))
+    prevangle=np.angle(neighbour[-1])
     neighbour.append(har_spec.nearest_neighbour_new(lat, h, psi_temp))
     two_body.append(har_spec.two_body_old(lat, psi_temp))
 
     # tracking current
-    phi_original.append(evolve.phi_J_track(lat,newtime,J_func,neighbour[-1],psi_temp))
+    phi.append(evolve.phi_J_track(lat,newtime,J_func,neighbour[-1],psi_temp))
+    # phi.append(evolve.phi_J_track_unwravel(lat,newtime,J_func,neighbour[-1],prevangle,psi_temp))
+
 
     # tracking D
-    # phi_original.append(evolve.phi_D_track(lat,newtime,D_func,two_body[-1],psi_temp))
+    # phi.append(evolve.phi_D_track(lat,newtime,D_func,two_body[-1],psi_temp))
 
-    J_field_track.append(har_spec.J_expectation_track(lat, h, psi_temp,phi_original[-1]))
+    J_field_track.append(har_spec.J_expectation_track(lat, h, psi_temp,phi[-1]))
     D_track.append(observable.DHP(lat, psi_temp))
 
     # diff = (psi_temp - oldpsi) / delta
@@ -131,7 +134,7 @@ del phi_reconstruct[0:2]
 """Note that this is now saved with the LOADED parameters, not the ones used in tracking"""
 np.save('./data/tracking/double'+newparameternames,D_track)
 np.save('./data/tracking/Jfield'+newparameternames,J_field_track)
-np.save('./data/tracking/phi'+newparameternames,phi_original)
+np.save('./data/tracking/phi'+newparameternames,phi)
 np.save('./data/tracking/neighbour'+newparameternames,neighbour)
 np.save('./data/tracking/twobody'+newparameternames,two_body)
 

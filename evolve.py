@@ -93,6 +93,25 @@ def phi_J_track(lat, current_time, J_reconstruct,neighbour, psi):
     # phi = np.arcsin(arg + 0j)
     return phi.real
 
+
+def phi_J_track_unwravel(lat, current_time, J_reconstruct,neighbour, prevangle, psi):
+    # Import the current function
+    # if current_time <self.delta:
+    #     current=self.J_reconstruct(0)
+    # else:
+    #     current = self.J_reconstruct(current_time-self.delta)
+    current = J_reconstruct(current_time)
+    # Arrange psi to calculate the nearest neighbour expectations
+    D = neighbour
+    angle = np.angle(D)
+    mag = np.abs(D)
+    scalefactor = 2 * lat.a * lat.t * mag
+    # assert np.abs(current)/scalefactor <=1, ('Current too large to reproduce, ration is %s' % np.abs(current/scalefactor))
+    arg = -current / (2 * lat.a * lat.t * mag)
+    phi = np.arcsin(arg + 0j) + angle
+    # phi = np.arcsin(arg + 0j)
+    return phi.real
+
 def phi_reconstruct(lat, J_reconstruct,neighbour):
     # Import the current function
     # if current_time <self.delta:

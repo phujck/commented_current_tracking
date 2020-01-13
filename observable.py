@@ -46,8 +46,3 @@ def overlap(lat,initial,psi):
     fid = np.dot(initial.conj(),psi)
     fid = abs(fid)
     return (fid**2, fid)
-
-def energy(psi,lat,h,current_time,time):
-    h1 = evolve.ham1(lat,h,current_time,time)
-    #<psi|H|psi>=<psi|if(...)=i<psi_r|f(...)+<psi_i|f(...)
-    return np.dot(psi.conj(), evolve.f(lat,h1,psi)).real/np.dot(psi.conj(),psi).real

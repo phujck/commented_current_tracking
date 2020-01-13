@@ -43,7 +43,7 @@ cycles = 10
 """Timestep used"""
 delta = 0.05
 
-"""these lists get popuproped with the appropriate expectations"""
+"""these lists get populated with the appropriate expectations"""
 neighbour = []
 energy=[]
 doublon_energy=[]

@@ -155,6 +155,8 @@ t1 = t
 t2 = 0.52
 U = 0* t
 U2 = 1* t
+U_track=0*t
+U_track2=1*t
 delta = 0.05
 delta1 = delta
 delta2 = 0.05
@@ -167,47 +169,19 @@ F0 = 10
 a = 4
 scalefactor = 1
 scalefactor2 = 1
-ascale = 10
-ascale2 = 1
+ascale = 1.0005
+ascale2 = 1.1
 
 
 """Turn this to True in order to load tracking files"""
 Tracking = True
 
+
+"""Loading data"""
 prop = hams.hhg(field=field, nup=number, ndown=number, nx=nx, ny=0, U=U, t=t, F0=F0, a=a, bc='pbc')
 prop2 = hams.hhg(field=field, nup=number, ndown=number, nx=nx, ny=0, U=U2, t=t2, F0=F0, a=a, bc='pbc')
 print(prop.field)
 print(prop2.field)
-if Tracking:
-    """Notice the U's have been swapped on the presumption of tracking the _other_ system."""
-    prop_track = hams.hhg(field=field, nup=number, ndown=number, nx=nx, ny=0, U=U2, t=t, F0=F0, a=ascale * a,
-                          bc='pbc')
-    prop_track2 = hams.hhg(field=field, nup=number, ndown=number, nx=nx, ny=0, U=U, t=t, F0=F0, a=ascale2 * a,
-                           bc='pbc')
-    delta_track = prop_track.freq * delta / prop.freq
-    delta_track2 = prop_track2.freq * delta2 / prop.freq
-    newparameternames = '-%s-nsites-%s-cycles-%s-U-%s-t-%s-n-%s-delta-%s-field-%s-amplitude-%s-ascale-%s-scalefactor.npy' % (
-        nx, cycles, U, t, number, delta, field, F0, ascale,scalefactor)
-
-    J_field_track = np.load('./data/tracking/Jfield' + newparameternames) / scalefactor
-    phi_track = np.load('./data/tracking/phi' + newparameternames)
-    neighbour_track = np.load('./data/tracking/neighbour' + newparameternames)
-    two_body_track = np.load('./data/tracking/twobody' + newparameternames)
-    t_track = np.linspace(0.0, cycles, len(J_field_track))
-    D_track = np.load('./data/tracking/double' + newparameternames)
-
-    newparameternames2 = '-%s-nsites-%s-cycles-%s-U-%s-t-%s-n-%s-delta-%s-field-%s-amplitude-%s-ascale-%s-scalefactor.npy' % (
-        nx, cycles2, U2, t2, number2, delta2, field, F0, ascale2,scalefactor2)
-
-    J_field_track2 = np.load('./data/tracking/Jfield' + newparameternames2) / scalefactor2
-    phi_track2 = np.load('./data/tracking/phi' + newparameternames2)
-    neighbour_track2 = np.load('./data/tracking/neighbour' + newparameternames2)
-    two_body_track2 = np.load('./data/tracking/twobody' + newparameternames2)
-    t_track2 = np.linspace(0.0, cycles, len(J_field_track2))
-    D_track2 = np.load('./data/tracking/double' + newparameternames2)
-
-    times_track = np.linspace(0.0, cycles, len(J_field_track))
-    times_track2 = np.linspace(0.0, cycles, len(J_field_track2))
 
 # load files
 parameternames = '-%s-nsites-%s-cycles-%s-U-%s-t-%s-n-%s-delta-%s-field-%s-amplitude.npy' % (
@@ -237,6 +211,39 @@ times = np.linspace(0.0, cycles, len(J_field))
 times2 = np.linspace(0.0, cycles, len(J_field2))
 
 
+
+if Tracking:
+    """load parameters for tracking"""
+    prop_track = hams.hhg(field=field, nup=number, ndown=number, nx=nx, ny=0, U=U_track, t=t, F0=F0, a=ascale * a,
+                          bc='pbc')
+    prop_track2 = hams.hhg(field=field, nup=number, ndown=number, nx=nx, ny=0, U=U_track2, t=t, F0=F0, a=ascale2 * a,
+                           bc='pbc')
+    delta_track = prop_track.freq * delta / prop.freq
+    delta_track2 = prop_track2.freq * delta2 / prop.freq
+    newparameternames = '-%s-nsites-%s-cycles-%s-U-%s-t-%s-n-%s-delta-%s-field-%s-amplitude-%s-ascale-%s-scalefactor.npy' % (
+        nx, cycles, U, t, number, delta, field, F0, ascale,scalefactor)
+
+    J_field_track = np.load('./data/tracking/Jfield' + newparameternames) / scalefactor
+    phi_track = np.load('./data/tracking/phi' + newparameternames)
+    neighbour_track = np.load('./data/tracking/neighbour' + newparameternames)
+    two_body_track = np.load('./data/tracking/twobody' + newparameternames)
+    t_track = np.linspace(0.0, cycles, len(J_field_track))
+    D_track = np.load('./data/tracking/double' + newparameternames)
+
+    newparameternames2 = '-%s-nsites-%s-cycles-%s-U-%s-t-%s-n-%s-delta-%s-field-%s-amplitude-%s-ascale-%s-scalefactor.npy' % (
+        nx, cycles2, U2, t2, number2, delta2, field, F0, ascale2,scalefactor2)
+
+    J_field_track2 = np.load('./data/tracking/Jfield' + newparameternames2) / scalefactor2
+    phi_track2 = np.load('./data/tracking/phi' + newparameternames2)
+    neighbour_track2 = np.load('./data/tracking/neighbour' + newparameternames2)
+    two_body_track2 = np.load('./data/tracking/twobody' + newparameternames2)
+    t_track2 = np.linspace(0.0, cycles, len(J_field_track2))
+    D_track2 = np.load('./data/tracking/double' + newparameternames2)
+
+    times_track = np.linspace(0.0, cycles, len(J_field_track))
+    times_track2 = np.linspace(0.0, cycles, len(J_field_track2))
+
+
 """Plot currents"""
 
 plt.subplot(211)
@@ -257,6 +264,68 @@ if Tracking:
 plt.xlabel('Time [cycles]')
 plt.ylabel('$J(t)$')
 plt.annotate('b)', xy=(0.3, np.max(J_field2) - 0.05), fontsize=25)
+plt.show()
+
+"""plot phi"""
+plt.plot(times, phi_original.real, label='original')
+# plt.plot(times, phi_original.real-np.angle(neighbour), label='original')
+# plt.plot(t2, J_field2.real, label='swapped')
+if Tracking:
+    plt.plot(t_track, phi_track.real, label='tracked', linestyle='dashed')
+    # plt.plot(t_track, phi_track.real-np.angle(neighbour_track), label='tracked', linestyle='dashed')
+plt.plot(times,0.5*np.pi*np.ones(len(times)),linestyle='dotted',color='red')
+plt.plot(times,-0.5*np.pi*np.ones(len(times)),linestyle='dotted',color='red')
+plt.xlabel('Time [cycles]')
+plt.ylabel('$\\Phi(t)$')
+plt.yticks(np.arange(-1 * np.pi, 1 * np.pi, 0.5 * np.pi),
+           [r"$" + format(r / np.pi, ".2g") + r"\pi$" for r in np.arange(-1 * np.pi, 1 * np.pi, .5 * np.pi)])
+plt.show()
+
+plt.plot(times2, phi_original2.real, label='original')
+# plt.plot(times, phi_original.real-np.angle(neighbour), label='original')
+# plt.plot(t2, J_field2.real, label='swapped')
+if Tracking:
+    plt.plot(t_track2, phi_track2.real, label='tracked', linestyle='dashed')
+    # plt.plot(t_track, phi_track.real-np.angle(neighbour_track), label='tracked', linestyle='dashed')
+plt.plot(times,0.5*np.pi*np.ones(len(times)),linestyle='dotted',color='red')
+plt.plot(times,-0.5*np.pi*np.ones(len(times)),linestyle='dotted',color='red')
+plt.xlabel('Time [cycles]')
+plt.ylabel('$\\Phi(t)$')
+plt.yticks(np.arange(-1 * np.pi, 1 * np.pi, 0.5 * np.pi),
+           [r"$" + format(r / np.pi, ".2g") + r"\pi$" for r in np.arange(-1 * np.pi, 1 * np.pi, .5 * np.pi)])
+plt.show()
+
+"""plot phi-theta"""
+# plt.plot(times, phi_original.real, label='original')
+plt.plot(times, phi_original.real-np.angle(neighbour), label='original')
+# plt.plot(t2, J_field2.real, label='swapped')
+if Tracking:
+    # plt.plot(t_track, phi_track.real, label='tracked', linestyle='dashed')
+    plt.plot(t_track, phi_track.real-np.angle(neighbour_track), label='tracked', linestyle='dashed')
+plt.plot(times,0.5*np.pi*np.ones(len(times)),linestyle='dotted',color='red')
+plt.plot(times,-0.5*np.pi*np.ones(len(times)),linestyle='dotted',color='red')
+plt.xlabel('Time [cycles]')
+plt.ylabel('$\\Phi(t)-\\theta(t)$')
+plt.yticks(np.arange(-1 * np.pi, 1 * np.pi, 0.5 * np.pi),
+           [r"$" + format(r / np.pi, ".2g") + r"\pi$" for r in np.arange(-1 * np.pi, 1 * np.pi, .5 * np.pi)])
+plt.show()
+
+# plt.plot(times, phi_original.real, label='original')
+plt.plot(times2, phi_original2.real-np.angle(neighbour2), label='original')
+# plt.plot(t2, J_field2.real, label='swapped')
+if Tracking:
+    # plt.plot(t_track, phi_track.real, label='tracked', linestyle='dashed')
+    plt.plot(t_track2, phi_track2.real-np.angle(neighbour_track2), label='tracked', linestyle='dashed')
+plt.plot(times,0.5*np.pi*np.ones(len(times)),linestyle='dotted',color='red')
+plt.plot(times,-0.5*np.pi*np.ones(len(times)),linestyle='dotted',color='red')
+plt.xlabel('Time [cycles]')
+plt.ylabel('$\\Phi(t)-\\theta(t)$')
+plt.yticks(np.arange(-1 * np.pi, 1 * np.pi, 0.5 * np.pi),
+           [r"$" + format(r / np.pi, ".2g") + r"\pi$" for r in np.arange(-1 * np.pi, 1 * np.pi, .5 * np.pi)])
+plt.show()
+
+plt.plot(times2, np.angle(neighbour2), label='original')
+plt.plot(t_track2, np.angle(neighbour_track2), label='tracked', linestyle='dashed')
 plt.show()
 
 """Plotting Gradients"""
