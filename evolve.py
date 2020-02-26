@@ -17,6 +17,16 @@ def ham1(lat, h, current_time, cycles):
     h_backwards[0, -1] = h[0, -1]
     return np.exp(1.j * phi) * h_forwards + np.exp(-1.j * phi) * h_backwards
 
+def ham_set_phi(lat,h, current_time,last_phi):
+
+    phi = last_phi(current_time)
+    h_forwards = np.triu(h)
+    h_forwards[0, -1] = 0.0
+    h_forwards[-1, 0] = h[-1, 0]
+    h_backwards = np.tril(h)
+    h_backwards[-1, 0] = 0.0
+    h_backwards[0, -1] = h[0, -1]
+    return np.exp(1.j * phi) * h_forwards + np.exp(-1.j * phi) * h_backwards
 
 def f(lat, h1, psi):
     psi_r = psi.real
@@ -248,3 +258,13 @@ def RK4_D_track(lat, h, delta, current_time, J_reconstruct, neighbour, psi):
     k4 = -1.j * delta * f(lat, ht, psi + k3)
     return psi + (k1 + 2. * k2 + 2. * k3 + k4) / 6.
 
+
+def RK4_set_phi(lat, h, delta, current_time, last_phi, psi):
+    ht = ham_set_phi(lat, h, current_time, last_phi)
+    k1 = -1.j * delta * f(lat, ht, psi)
+    ht = ham_set_phi(lat, h, current_time+0.5*delta, last_phi)
+    k2 = -1.j * delta * f(lat, ht, psi + 0.5 * k1)
+    k3 = -1.j * delta * f(lat, ht, psi + 0.5 * k2)
+    ht = ham_set_phi(lat, h, current_time+delta, last_phi)
+    k4 = -1.j * delta * f(lat, ht, psi + k3)
+    return psi + (k1 + 2. * k2 + 2. * k3 + k4) / 6.

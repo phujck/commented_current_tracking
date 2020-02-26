@@ -169,12 +169,12 @@ F0 = 10
 a = 4
 scalefactor = 1
 scalefactor2 = 1
-ascale = 1.0005
+ascale = 1.0
 ascale2 = 1.1
 
 
 """Turn this to True in order to load tracking files"""
-Tracking = True
+Tracking = False
 
 
 """Loading data"""
@@ -324,9 +324,7 @@ plt.yticks(np.arange(-1 * np.pi, 1 * np.pi, 0.5 * np.pi),
            [r"$" + format(r / np.pi, ".2g") + r"\pi$" for r in np.arange(-1 * np.pi, 1 * np.pi, .5 * np.pi)])
 plt.show()
 
-plt.plot(times2, np.angle(neighbour2), label='original')
-plt.plot(t_track2, np.angle(neighbour_track2), label='tracked', linestyle='dashed')
-plt.show()
+
 
 """Plotting Gradients"""
 two_body = np.array(two_body)

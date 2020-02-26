@@ -160,10 +160,10 @@ params = {
 plt.rcParams.update(params)
 print(plt.rcParams.keys())
 # Load parameters and data. 2 suffix is for loading in a different simulation for comparison
-number = 5
+number = 3
 number2 = number
 nelec = (number, number)
-nx = 10
+nx = 6
 nx2 = nx
 ny = 0
 t = 0.52
@@ -180,7 +180,7 @@ field = 32.9
 field2 = 32.9
 F0 = 10
 a = 4
-scalefactor = 0.999
+scalefactor = 0.9
 scalefactor2 = 1
 ascale = 1.
 ascale2 = 1
@@ -213,8 +213,8 @@ delta_switch = 0.05
 # load files
 parameternames = '-%s-nsites-%s-cycles-%s-U-%s-t-%s-n-%s-delta-%s-field-%s-amplitude.npy' % (
     nx, cycles, U, t, number, delta, field, F0)
-newparameternames = '-%s-nsites-%s-cycles-%s-U-%s-t-%s-n-%s-delta-%s-field-%s-amplitude-%s-ascale.npy' % (
-    nx, cycles, U, t, number, delta, field, F0, ascale)
+newparameternames = '-%s-nsites-%s-cycles-%s-U-%s-t-%s-n-%s-delta-%s-field-%s-amplitude-%s-ascale-%s-scalefactor.npy' % (
+    nx, cycles, U, t, number, delta, field, F0, ascale,scalefactor)
 J_field = np.load('./data/original/Jfield' + parameternames)
 phi_original = np.load('./data/original/phi' + parameternames)
 phi_reconstruct = np.load('./data/original/phirecon' + parameternames)
@@ -229,7 +229,6 @@ two_body = np.load('./data/original/twobody' + parameternames)
 # two_body_old=np.load('./data/original/twobodyold'+parameternames)
 D = np.load('./data/original/double' + parameternames)
 
-error = np.load('./data/original/error' + parameternames)
 
 parameternames2 = '-%s-nsites-%s-cycles-%s-U-%s-t-%s-n-%s-delta-%s-field-%s-amplitude.npy' % (
     nx2, cycles2, U2, t2, number2, delta2, field2, F0)
@@ -249,8 +248,8 @@ D2 = np.load('./data/original/double' + parameternames2)
 if Tracking:
     # parameternames = '-%s-nsites-%s-cycles-%s-U-%s-t-%s-n-%s-delta-%s-field-%s-amplitude.npy' % (
     # nx, cycles, U, t, number, delta, field, F0)
-    newparameternames = '-%s-nsites-%s-cycles-%s-U-%s-t-%s-n-%s-delta-%s-field-%s-amplitude-%s-ascale.npy' % (
-        nx, cycles, U, t, number, delta, field, F0, ascale)
+    newparameternames = '-%s-nsites-%s-cycles-%s-U-%s-t-%s-n-%s-delta-%s-field-%s-amplitude-%s-ascale-%s-scalefactor.npy' % (
+        nx, cycles, U, t, number, delta, field, F0, ascale, scalefactor)
 
     J_field_track = np.load('./data/tracking/Jfield' + newparameternames) * Jscale*ascale / scalefactor
     phi_track = np.load('./data/tracking/phi' + newparameternames)/scalefactor

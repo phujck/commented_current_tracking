@@ -37,10 +37,10 @@ t = 0.52
 # t=1.91
 # t=1
 """U is the the ORIGINAL data you want to track"""
-U = 1*t
+U = 0*t
 
 """U_track is the NEW system parameter you want to do tracking in"""
-U_track=1*t
+U_track=0*t
 delta = 0.05
 cycles = 10
 field= 32.9
@@ -49,10 +49,10 @@ F0=10
 a=4
 
 # This scales the lattice parameter
-ascale=1.1
+ascale=1
 
 # this scales the input current.
-scalefactor=1
+scalefactor=0.99
 
 """Used for LOADING the expectation you want to track"""
 parameternames='-%s-nsites-%s-cycles-%s-U-%s-t-%s-n-%s-delta-%s-field-%s-amplitude.npy' % (nx,cycles,U,t,number,delta,field,F0)
