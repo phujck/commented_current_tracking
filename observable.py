@@ -14,6 +14,37 @@ def DHP(lat,psi):
     # return D/lat.nsites
     return D/lat.nsites
 
+def doublon_densities(lat,psi):
+    densities=[]
+    psi = np.reshape(psi,
+                     (fci.cistring.num_strings(lat.nsites, lat.nup), fci.cistring.num_strings(lat.nsites, lat.ndown)))
+
+    for i in range(lat.nsites):
+        densities.append(harmonic.compute_inner_product(psi, lat.nsites, (lat.nup, lat.ndown), [i, i, i, i], [1, 0, 1, 0],
+                                            [1, 1, 0, 0]))
+    # return D/lat.nsites
+    return densities
+
+def spin_up_densities(lat,psi):
+    densities=[]
+    psi = np.reshape(psi,
+                     (fci.cistring.num_strings(lat.nsites, lat.nup), fci.cistring.num_strings(lat.nsites, lat.ndown)))
+
+    for i in range(lat.nsites):
+        densities.append(harmonic.compute_inner_product(psi, lat.nsites, (lat.nup, lat.ndown), [i, i,], [1, 0], [1, 1]))
+    # return D/lat.nsites
+    return densities
+def spin_down_densities(lat,psi):
+    densities=[]
+    psi = np.reshape(psi,
+                     (fci.cistring.num_strings(lat.nsites, lat.nup), fci.cistring.num_strings(lat.nsites, lat.ndown)))
+
+    for i in range(lat.nsites):
+        densities.append(harmonic.compute_inner_product(psi, lat.nsites, (lat.nup, lat.ndown), [i, i,], [1, 0], [0, 0]))
+    # return D/lat.nsites
+    return densities
+
+
 def single_operator(lat, psi):
     psi = np.reshape(psi, (fci.cistring.num_strings(lat.nsites, lat.nup), fci.cistring.num_strings(lat.nsites, lat.ndown)))
     D = 0.

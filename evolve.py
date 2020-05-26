@@ -39,11 +39,25 @@ def f(lat, h1, psi):
     return pro
 
 
+def f_variable(lat, h1, psi):
+    psi_r = psi.real
+    psi_i = psi.imag
+    h1_r = h1.real
+    h1_i = h1.imag
+    # H|psi>=(h1+h2)|psi>=(h1_r+ih1_i+h2)|psi>=(h1_r+ih1_i+h2)|psi_r>+i(h1_r+ih1_i+h2)|psi_i>
+    pro = one_elec(lat, h1_r, psi_r) + 1.j * one_elec(lat, h1_i, psi_r, False) \
+          + 1.j * one_elec(lat, h1_r, psi_i) - one_elec(lat, h1_i, psi_i, False) + two_elec_variable(lat, psi_r, psi_i)
+    return pro
+
+
 
 def integrate_f(current_time,  psi, lat, cycles, h):
     ht = ham1(lat, h, current_time, cycles)
     return -1j * f(lat, ht, psi)
 
+def integrate_f_variable(current_time,  psi, lat, cycles, h):
+    ht = ham1(lat, h, current_time, cycles)
+    return -1j * f_variable(lat, ht, psi)
 
 
 
@@ -60,7 +74,17 @@ def two_elec(lat, psi_r, psi_i):
           + 0.5 * 1.j * fci.direct_uhf.contract_2e_hubbard((0, lat.U, 0), psi_i, lat.nsites, (lat.nup, lat.ndown))
     return pro.flatten()
 
+def two_elec_variable(lat, psi_r, psi_i):
+    pro = 0.5 * fci.direct_uhf.contract_2e_hubbard_variable(lat.U, psi_r, lat.nsites, (lat.nup, lat.ndown)) \
+          + 0.5 * 1.j * fci.direct_uhf.contract_2e_hubbard_variable(lat.U, psi_i, lat.nsites, (lat.nup, lat.ndown))
+    return pro.flatten()
 
+
+
+def two_elec_U_deriv(lat, psi_r, psi_i):
+    pro = 0.5 * fci.direct_uhf.contract_2e_hubbard((0, 1, 0), psi_r, lat.nsites, (lat.nup, lat.ndown)) \
+          + 0.5 * 1.j * fci.direct_uhf.contract_2e_hubbard((0, 1, 0), psi_i, lat.nsites, (lat.nup, lat.ndown))
+    return pro.flatten()
 #
 # def two_elec(lat, psi_r, psi_i):
 #     pro =  fci.direct_uhf.contract_2e_hubbard((0, lat.U, 0), psi_r, lat.nsites, (lat.nup, lat.ndown)) \
